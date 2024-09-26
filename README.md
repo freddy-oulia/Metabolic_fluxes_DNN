@@ -201,7 +201,7 @@ Metabolic_fluxes_DNN/
 └── LICENSE                 # Project license
 ```
 
-## Project structure
+## References
 
 TODO
 
