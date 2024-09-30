@@ -1,0 +1,9 @@
+cubist==0.1.0
+matplotlib
+numpy
+pandas
+ptitprince==0.2.7
+seaborn==0.11.0
+scikit-learn
+scipy
+tensorflow==2.10.0
