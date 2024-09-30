@@ -30,7 +30,7 @@ Using **Conda**, follow these steps to create the environment with all dependenc
 
 2. Create a virtual environment:
     ```bash
-    conda create -n environment_name python=3.7.13
+    conda create -n environment_name python=3.8
     ```
 
 3. Activate the virtual environment:
