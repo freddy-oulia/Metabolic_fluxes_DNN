@@ -1,4 +1,5 @@
 import math
+import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -200,9 +201,8 @@ def run_model(path_train_set, path_test_set, l_hyperparameter, predicted_expecte
 
 if __name__ == "__main__":
     # Default values: n_committees: 1 and neighbors: None
-    # Best values, neighbors: 3 and committees: 91
-    hyperparameter_cubist = {"n_committees": 91,
-                             "neighbors": 3,
+    hyperparameter_cubist = {"n_committees": 20,
+                             "neighbors": 5,
                              "norm_output": False}
 
     run_model(path_train_set="data/Table_S1_training_set.csv", path_test_set="data/Table_S2_test_set.csv",

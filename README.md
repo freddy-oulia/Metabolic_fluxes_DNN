@@ -59,7 +59,7 @@ This project includes several scripts, each designed for a specific task. Below 
 
 ### 1. Distribution
 
-To see distribution of the dataset, please run the script located at `scripts/show_distribution.py` using this:
+To see distribution of the dataset, please run the script located at `show_distribution.py` using this:
 
 ```bash
 python scripts/show_distribution.py
@@ -67,7 +67,7 @@ python scripts/show_distribution.py
 
 ### 2. PLS Model
 
-The script for the PLS model is located at `scripts/pls_model.py` and is used to train and evaluate the PLS model. We can also make a figure to compare the expected values to the predicted values.
+The script for the PLS model is located at `pls_model.py` and is used to train and evaluate the PLS model. We can also make a figure to compare the expected values to the predicted values.
 The figure will be in `plots/pls_model/pls_predicted_and observed.png`.
 To run the code use this:
 
@@ -77,7 +77,7 @@ python scripts/pls_model.py
 
 ### 3. Cubist Model
 
-The script for the Cubist model is located at `scripts/cubist_model.py` and is used to train and evaluate the Cubist model. We can also make a figure to compare the expected values to the predicted values.
+The script for the Cubist model is located at `cubist_model.py` and is used to train and evaluate the Cubist model. We can also make a figure to compare the expected values to the predicted values.
 The figure will be in `plots/cubist_model/cubist_predicted_and observed.png`.
 To run the code use this:
 
@@ -87,7 +87,7 @@ python scripts/cubist_model.py
 
 ### 4. DNN Model with a simple holdout evaluation
 
-The script for the DNN model is located at `scripts/simple_run.py` and is used to train and evaluate the DNN model following a holdout evaluation method.
+The script for the DNN model is located at `simple_run.py` and is used to train and evaluate the DNN model following a holdout evaluation method.
 Results will be saved at `results/simple_run/perf_simple_run.json` and the figure with training and validation RMSE curves can be found at `plots/simple_run/rmse_train_val.png`.
 We can also make a figure to compare the expected values to the predicted values found at `plots/simple_run/dnn_predicted_and observed.png`
 In the `hold_out_evaluation` method we can change many hyperparameters such as the model architecture in the `number_neurons` variable, the loss function in the `loss_fn` variable, or even the Earlystopping function in the `add_earlystopping` boolean variable.
@@ -98,7 +98,7 @@ python scripts/simple_run.py
 
 ### 5. DNN Model with repeated holdout evaluation
 
-The script to run the repeated hold out evaluation method with a DNN is found at `scripts/repeated_hold_out_evaluation_run.py`.
+The script to run the repeated hold out evaluation method with a DNN is found at `repeated_hold_out_evaluation_run.py`.
 Results are saved in `results/rho/performances_rho.json`. To make the boxplots or the correlation metrics plots change the `make_boxplot` boolean or the `correlation_metrics` boolean to `True` and make sure that the results file is in the right location.
 Plots can be found in `plots/boxplots` and `plots/correlation`. 
 
@@ -108,7 +108,7 @@ python scripts/repeated_hold_out_evaluation_run.py
 
 ### 6. DNN Model with repeated cross-validation
 
-The script to run the repeated cross-validation method with a DNN is found at `scripts/cross_validation_run.py`.
+The script to run the repeated cross-validation method with a DNN is found at `cross_validation_run.py`.
 Results are saved in `results/cv/performances_cv.json`. To make the boxplots or the correlation metrics plots change the `make_boxplot` boolean or the `correlation_metrics` boolean to `True` and make sure that the results file is in the right location.
 Plots can be found in `plots/boxplots` and `plots/correlation`. 
 
@@ -118,7 +118,7 @@ python scripts/cross_validation_run.py
 
 ### 7. Boxplots comparison
 
-The script to make the boxplots comparison is located at `scripts/boxplot_comparison.py`.
+The script to make the boxplots comparison is located at `boxplot_comparison.py`.
 The generated figures are saved in `plots/boxplot/comparison/`. Please make sure that the results file for the repeated cross-validation and repeated hold out evaluation are correctly located.
 
 ```bash
@@ -144,18 +144,6 @@ Metabolic_fluxes_DNN/
 │   └── cv
 │       └── performances_cv.json
 │
-├── scripts/                # Main scripts
-│   ├── show_distribution.py
-│   ├── pls_model.py
-│   ├── cubist_model.py
-│   ├── simple_run.py
-│   ├── repeated_hold_out_evaluation_run.py
-│   ├── cross_validation_run.py
-│   ├── boxplot_comparison.py
-│   ├── create_dnn_model.py
-│   ├── gridearch_run.py
-│   ├── metrics.py
-│   └── results_plots.py
 │
 ├── plots/                # Generated figures
 │   ├── distribution
@@ -194,6 +182,19 @@ Metabolic_fluxes_DNN/
 │       ├── rmse.png
 │       ├── mae.png
 │       └── r2.png
+│
+│   # Scripts
+├── show_distribution.py
+├── pls_model.py
+├── cubist_model.py
+├── simple_run.py
+├── repeated_hold_out_evaluation_run.py
+├── cross_validation_run.py
+├── boxplot_comparison.py
+├── create_dnn_model.py
+├── gridearch_run.py
+├── metrics.py
+├── results_plots.py
 │
 ├── requirements.txt        # Python dependencies for pip
 ├── README.md               # Project documentation

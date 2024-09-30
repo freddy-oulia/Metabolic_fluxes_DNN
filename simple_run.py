@@ -64,7 +64,12 @@ def print_performance(x_set, y_set, model, max_outputs, name_set):
     :param name_set: String, name of the given set
     """
     # Get predictions
-    predictions = model.predict(x=x_set, verbose=0)
+    if name_set == "Test":
+        start_time = time.time()
+        predictions = model.predict(x=x_set, verbose=0)
+        print(f"Inference time on test set {time.time() - start_time} seconds")
+    else:
+        predictions = model.predict(x=x_set, verbose=0)
 
     # De-normalize outputs
     predicted_values = predictions * max_outputs
@@ -255,7 +260,7 @@ def hold_out_evaluation(path_train_set, path_test_set, predicted_expected_plot=T
     # Make plot that compares expected values and predicted values
     if predicted_expected_plot:
         make_predict_vs_expected_plot(dnn_model=dnn_model, x_test=test_x, y_test=test_y, norm_outputs=denorm_output,
-                                      showfig=True, save_fig=False, save_path="plots/simple_run")
+                                      showfig=True, save_fig=True, save_path="plots/simple_run")
     return
 
 

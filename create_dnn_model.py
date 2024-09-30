@@ -24,6 +24,6 @@ def create_dnn(number_neurons, loss_fn, l_metrics, seed_val=42):
     output = tf.keras.layers.Dense(1, kernel_initializer=kernel, activation="sigmoid")(layer)
     model = tf.keras.models.Model(inputs=input_layer, outputs=output, name="Glycolysis_model")
 
-    # model.compile(loss=loss_fn, optimizer=tf.keras.optimizers.Adam(), metrics=l_metrics)
-    model.compile(loss=loss_fn, optimizer=tf.keras.optimizers.legacy.Adam(), metrics=l_metrics)
+    # model.compile(loss=loss_fn, optimizer=tf.keras.optimizers.legacy.Adam(), metrics=l_metrics)
+    model.compile(loss=loss_fn, optimizer=tf.keras.optimizers.Adam(), metrics=l_metrics)
     return model
