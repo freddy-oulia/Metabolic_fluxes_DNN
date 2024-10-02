@@ -7,7 +7,6 @@ import tensorflow as tf
 from pathlib import Path
 from numpy.random import seed
 from sklearn.model_selection import train_test_split
-import create_dnn_model
 from metrics import R2
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
@@ -20,38 +19,6 @@ FONTSIZE_TITLE = 18
 FONTSIZE_AXES_LABEL = 14
 FONTSIZE_LEGEND = 13
 VAL_DPI = 300
-
-
-def load_train_val_test_sets(path_train_set, path_test_set):
-    """
-    Load and normalize train, validation and test sets, including the outputs. The 5 test sets are concatenating into 1.
-    :param path_train_set: String path to training set
-    :param path_test_set: String path to test set
-    :returns: Sets of features and outputs for train, validation, test sets and values to de-normalize outputs
-    """
-    # Training and validation set
-    train_set = pd.read_csv(path_train_set, sep=";")
-    np_df = train_set.to_numpy()
-    max_features = np.max(np_df[:, :3])
-    max_outputs = np.max(np_df[:, 3])
-
-    # Normalize
-    inputs = np_df[:, :3] / max_features
-    outputs = np_df[:, 3] / max_outputs
-
-    x_train, x_val, y_train, y_val = train_test_split(inputs, outputs, test_size=0.2)
-
-    # Concatenating each test sets into 1
-    test_set = pd.read_csv(path_test_set, sep=";")
-
-    np_df_test = test_set.to_numpy()
-    # Remove test set name column
-    np_df_test = np_df_test[:, 1:].astype(np.float32)
-
-    # Normalize
-    x_test = np_df_test[:, :3] / max_features
-    y_test = np_df_test[:, 3] / max_outputs
-    return x_train, x_val, x_test, y_train, y_val, y_test, max_outputs
 
 
 def print_performance(x_set, y_set, model, max_outputs, name_set):
@@ -113,17 +80,17 @@ def save_and_plot_training_performance(history, save_result, result_path, show_p
 
         plt.plot(train_curve, label="train")
         plt.plot(val_curve, label="validation")
-        plt.xlabel("Epochs")
-        plt.ylabel("RMSE")
-        plt.legend()
-        plt.title("Evolution of RMSE on training and validation sets")
+        plt.xlabel("Epochs", fontsize=FONTSIZE_AXES_LABEL)
+        plt.ylabel("RMSE", fontsize=FONTSIZE_AXES_LABEL)
+        plt.legend(fontsize=FONTSIZE_LEGEND)
+        plt.title("Evolution of RMSE on training and validation sets", fontsize=FONTSIZE_TITLE)
         plt.grid()
 
         # Save plot
         if save_plot:
             save_path = Path(plot_path)
             save_path.mkdir(parents=True, exist_ok=True)
-            plt.savefig(save_path/"rmse_train_val.png", dpi=300)
+            plt.savefig(save_path/"rmse_train_val.png", dpi=VAL_DPI)
         if show_plot:
             plt.show()
     return
@@ -198,8 +165,8 @@ def hold_out_evaluation(path_train_set, path_test_set, predicted_expected_plot=T
     """
     # Fix seeding
     tf.random.set_seed(123)
-    np.random.seed(seed=123)
-    seed(123)
+    seed(seed=123)
+    # Note: despite seeding, results may not be constant when using GPU
 
     # Check if gpu is available
     try:
@@ -213,40 +180,67 @@ def hold_out_evaluation(path_train_set, path_test_set, predicted_expected_plot=T
         else:
             device_name = '/device:CPU:0'
 
-    # Load and normalize train, validation and test sets
-    train_x, val_x, test_x, train_y, val_y, test_y, denorm_output = load_train_val_test_sets(path_train_set,
-                                                                                             path_test_set)
+    # Load training dataset
+    train_dataset = pd.read_csv(path_train_set, sep=";")
 
-    # Create DNN model
-    number_neurons = [105, 105, 105]
-    loss_fn = tf.keras.losses.MeanSquaredError()
-    l_metrics = [tf.keras.metrics.RootMeanSquaredError(), R2(), tf.keras.metrics.MeanAbsoluteError()]
-    dnn_model = create_dnn_model.create_dnn(number_neurons=number_neurons, loss_fn=loss_fn, l_metrics=l_metrics)
+    # Normalize data
+    np_train_df = train_dataset.to_numpy()
+    max_features = np.max(np_train_df[:, :3])
+    max_outputs = np.max(np_train_df[:, 3])
+
+    norm_inputs = np_train_df[:, :3] / max_features
+    norm_outputs = np_train_df[:, 3] / max_outputs
+
+    # Create train and validation sets
+    x_train, x_val, y_train, y_val = train_test_split(norm_inputs, norm_outputs, test_size=0.2, random_state=123)
 
     # EarlyStopping function
-    add_earlystopping = True
-    if add_earlystopping:
-        early_stopping_fn = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=100, mode="min", verbose=1,
-                                                             restore_best_weights=True)
+    early_stopping_fn = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=100, mode="min", verbose=1,
+                                                         restore_best_weights=True)
+
+    # Create the neural network
+    kernel = tf.keras.initializers.GlorotUniform(123)  # Initializer for weights matrix
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Input(shape=(3,)),
+        tf.keras.layers.Dense(105, activation="elu", kernel_initializer=kernel),
+        tf.keras.layers.Dense(105, activation="elu", kernel_initializer=kernel),
+        tf.keras.layers.Dense(105, activation="elu", kernel_initializer=kernel),
+        tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer=kernel)], name="Glycolysis_model"
+    )
+
+    model.compile(
+        loss=tf.keras.losses.MeanSquaredError(),
+        optimizer=tf.keras.optimizers.Adam(),
+        metrics=[tf.keras.metrics.RootMeanSquaredError(), R2(), tf.keras.metrics.MeanAbsoluteError()]
+    )
 
     # Train model - Verbosity: 0 = silent; 1 = progress bar; 2 = one line per epoch
     train_time = time.time()
+    print("Start training...")
     with tf.device(device_name):
-        print("Training in progress...")
-        if add_earlystopping:
-            history = dnn_model.fit(train_x, train_y, batch_size=100, epochs=3000, validation_data=(val_x, val_y),
-                                    verbose=0, callbacks=[early_stopping_fn])
-        else:
-            history = dnn_model.fit(train_x, train_y, batch_size=100, epochs=3000, validation_data=(val_x, val_y),
-                                    verbose=0)
-    print(f"\nTraining time: {(time.time() - train_time) // 60} min and {(time.time() - train_time) % 60} seconds\n")
+        history = model.fit(x_train, y_train, batch_size=100, epochs=3000, validation_data=(x_val, y_val),
+                            callbacks=[early_stopping_fn], verbose=1)
+    print("----- End of training --------\n")
+    train_time = time.time() - train_time
+    print(f"Training time: {train_time // 60} min and {train_time % 60} seconds \n")
 
-    if add_earlystopping:
-        # Print performance on train set with saved weights
-        print_performance(train_x, train_y, dnn_model, denorm_output, "Train")
+    # Final evaluation on train and validation sets
+    print_performance(x_set=x_train, y_set=y_train, model=model, max_outputs=max_outputs, name_set="Train")
+    print_performance(x_set=x_val, y_set=y_val, model=model, max_outputs=max_outputs, name_set="Val")
 
-        # Print performance on validation set with saved weights
-        print_performance(val_x, val_y, dnn_model, denorm_output, "Validation")
+    # Loading test set
+    test_dataset = pd.read_csv(path_test_set, sep=";")
+    np_test_df = test_dataset.to_numpy()
+
+    # Remove test set name column
+    np_df_test = np_test_df[:, 1:].astype(np.float32)
+
+    # Normalize
+    test_inputs = np_df_test[:, :3] / max_features
+    test_outputs = np_df_test[:, 3] / max_outputs
+
+    # Evaluating model on test set
+    print_performance(x_set=test_inputs, y_set=test_outputs, model=model, max_outputs=max_outputs, name_set="Test")
 
     # Save and plot training and validation performance
     save_plot_training_perf = False
@@ -254,13 +248,11 @@ def hold_out_evaluation(path_train_set, path_test_set, predicted_expected_plot=T
         save_and_plot_training_performance(history=history, save_result=True, result_path="results/simple_run",
                                            show_plot=False, save_plot=True, plot_path="plots/simple_run")
 
-    # Print performance on test set with saved weights
-    print_performance(test_x, test_y, dnn_model, denorm_output, "Test")
-
     # Make plot that compares expected values and predicted values
     if predicted_expected_plot:
-        make_predict_vs_expected_plot(dnn_model=dnn_model, x_test=test_x, y_test=test_y, norm_outputs=denorm_output,
-                                      showfig=True, save_fig=True, save_path="plots/simple_run")
+        make_predict_vs_expected_plot(dnn_model=model, x_test=test_inputs, y_test=test_outputs,
+                                      norm_outputs=max_outputs, showfig=True, save_fig=True,
+                                      save_path="plots/simple_run")
     return
 
 
