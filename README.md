@@ -14,7 +14,7 @@ Metabolic pathway modeling, essential for understanding organism metabolism, is 
 
 Before installing this project, make sure you have the following installed on your machine:
 
-- [Python 3.x](https://www.python.org/downloads/)
+- [Python 3.8](https://www.python.org/downloads/)
 - [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (if using `environment.yml`)
 - [Git](https://git-scm.com/) (optional, but recommended)
 
