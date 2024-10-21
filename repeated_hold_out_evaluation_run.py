@@ -27,8 +27,8 @@ def load_train_val_test_sets(path_train_set, path_test_set):
     :returns: Sets of features and outputs for train, validation, test sets and values to de-normalize outputs
     """
     # Training and validation set
-    train_set = pd.read_csv(path_train_set, sep=";")
-    np_df = train_set.to_numpy()
+    train_set = pd.read_csv(path_train_set, sep=",")
+    np_df = train_set.to_numpy()[:, 1:].astype(np.float32)
     max_features = np.max(np_df[:, :3])
     max_outputs = np.max(np_df[:, 3])
 
@@ -39,10 +39,10 @@ def load_train_val_test_sets(path_train_set, path_test_set):
     x_train, x_val, y_train, y_val = train_test_split(inputs, outputs, test_size=0.2)
 
     # Loading test sets
-    test_set = pd.read_csv(path_test_set, sep=";")
+    test_set = pd.read_csv(path_test_set, sep=",")
 
     # 5 different test sets
-    np_df_test = test_set.to_numpy()
+    np_df_test = test_set.to_numpy()[:, 1:]
     xs_test = []
     ys_test = []
 

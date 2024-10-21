@@ -76,11 +76,11 @@ def grid_search_cv(l_hyperparameter, nb_seed=42):
         else:
             device_name = '/device:CPU:0'
 
-    dataset = pd.read_csv("data/Table_S1_training_set.csv", sep=";")
+    dataset = pd.read_csv("data/Table_S1_training_set.csv", sep=",")
 
     print("Pre-processing dataset...")
     # Normalize data
-    np_df = dataset.to_numpy()
+    np_df = dataset.to_numpy()[:, 1:].astype(np.float32)
     max_features = np.max(np_df[:, :3])
     max_outputs = np.max(np_df[:, 3])
 
@@ -183,11 +183,11 @@ def grid_search_normal(l_hyperparameter):
         else:
             device_name = '/device:CPU:0'
 
-    dataset = pd.read_csv("data/Table_S1_training_set.csv", sep=";")
+    dataset = pd.read_csv("data/Table_S1_training_set.csv", sep=",")
 
     print("Pre-processing dataset...")
     # Normalize data
-    np_df = dataset.to_numpy()
+    np_df = dataset.to_numpy()[:, 1:].astype(np.float32)
     max_features = np.max(np_df[:, :3])
     max_outputs = np.max(np_df[:, 3])
 

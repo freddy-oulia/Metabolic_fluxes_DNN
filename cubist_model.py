@@ -120,8 +120,8 @@ def run_model(path_train_set, path_test_set, l_hyperparameter, predicted_expecte
     :param predicted_expected_plot: Boolean to make predicted vs expected plot
     """
     # Load and normalize train set
-    train_dataset = pd.read_csv(path_train_set, sep=";")
-    np_df = train_dataset.to_numpy()
+    train_dataset = pd.read_csv(path_train_set, sep=",")
+    np_df = train_dataset.to_numpy()[:, 1:].astype(np.float32)
     max_features = np.max(np_df[:, :3])
     max_outputs = np.max(np_df[:, 3])
 
@@ -141,8 +141,8 @@ def run_model(path_train_set, path_test_set, l_hyperparameter, predicted_expecte
     x_validation = x_validation[:, :3]
 
     # Load and normalize test sets
-    test_dataset = pd.read_csv(path_test_set, sep=";")
-    np_df_test = test_dataset.to_numpy()
+    test_dataset = pd.read_csv(path_test_set, sep=",")
+    np_df_test = test_dataset.to_numpy()[:, 1:]
     xs_test = []
     ys_test = []
 

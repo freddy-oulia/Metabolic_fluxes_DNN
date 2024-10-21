@@ -181,10 +181,11 @@ def hold_out_evaluation(path_train_set, path_test_set, predicted_expected_plot=T
             device_name = '/device:CPU:0'
 
     # Load training dataset
-    train_dataset = pd.read_csv(path_train_set, sep=";")
+    train_dataset = pd.read_csv(path_train_set, sep=",")
 
-    # Normalize data
-    np_train_df = train_dataset.to_numpy()
+    # Normalize data and remove id column
+    np_train_df = train_dataset.to_numpy()[:, 1:].astype(np.float32)
+
     max_features = np.max(np_train_df[:, :3])
     max_outputs = np.max(np_train_df[:, 3])
 
@@ -229,11 +230,11 @@ def hold_out_evaluation(path_train_set, path_test_set, predicted_expected_plot=T
     print_performance(x_set=x_val, y_set=y_val, model=model, max_outputs=max_outputs, name_set="Val")
 
     # Loading test set
-    test_dataset = pd.read_csv(path_test_set, sep=";")
+    test_dataset = pd.read_csv(path_test_set, sep=",")
     np_test_df = test_dataset.to_numpy()
 
-    # Remove test set name column
-    np_df_test = np_test_df[:, 1:].astype(np.float32)
+    # Remove id and test set name columns
+    np_df_test = np_test_df[:, 2:].astype(np.float32)
 
     # Normalize
     test_inputs = np_df_test[:, :3] / max_features
