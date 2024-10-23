@@ -4,8 +4,8 @@ from pathlib import Path
 
 if __name__ == "__main__":
     # Load datasets
-    train_df = pd.read_csv(Path("data/Table_S1_training_set.csv"), sep=";")
-    test_df = pd.read_csv(Path("data/Table_S2_test_set.csv"), sep=";")
+    train_df = pd.read_csv(Path("data/Table_S1_training_set.csv"), sep=",")
+    test_df = pd.read_csv(Path("data/Table_S2_test_set.csv"), sep=",")
 
     # Features
     features = ["PGAM", "ENO", "PPDK"]
