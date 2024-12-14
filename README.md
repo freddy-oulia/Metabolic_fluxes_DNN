@@ -209,3 +209,6 @@ Oulia, F.; Charton, P.; Lo-Thong-Viramoutou, O.; Acevedo-Rocha, C.G.; Liu, W.; H
 ## License
 
 The complete source code, datasets, and models are available under the Creative Commons Attribution-Non-Commercial ShareAlike International License, Version 4.0 (CC-BY-NC-SA 4.0) for open, non-commercial use.
+See the [LICENSE-CC-BY-NC-SA](./LICENSE-BY-NC-SA) file for more details.
+
+[![Creative Commons License](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
