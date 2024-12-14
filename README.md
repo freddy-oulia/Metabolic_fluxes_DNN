@@ -1,6 +1,6 @@
-# Modeling Metabolic Fluxes Using Deep Learning Based on Enzyme Variations
+# Modeling Metabolic Fluxes Using Deep Learning Based on Enzyme Variations: _Applications to Glycolysis in Entamoeba histolytica_
 
-Metabolic pathway modeling, essential for understanding organism metabolism, is pivotal in predicting genetic mutation effects, drug design, and biofuel development. Enhancing these modeling techniques is crucial for achieving greater prediction accuracy and reliability. Nevertheless, the limited experimental data or the complexity of the pathway makes it challenging for researchers. Deep Learning (DL) is known to perform better than other Machine Learning (ML) approaches if the right conditions are met (i.e., large database and good choice of parameters). Here, we use a knowledge-based model to massively generate synthetic data and extend the small initial dataset of experimental values. The main objective is to assess if DL can perform at least as well as other ML approaches in flux prediction, using 68,950 instances. Two processing methods are used to generate DL models: cross-validation and repeated holdout evaluation. DL models predict the metabolic fluxes with high precision and outperform the best known ML approach (The Cubist model): RMSE<0.12%. of average flux in both cases. They outperform the PLS model (RMSE: 36.72% of the average flux). Find in this repository code and data to train and test ML (PLS and Cubist) and DL (Deep Neural Network) models on the data.
+Metabolic pathway modeling, essential for understanding organism metabolism, is pivotal in predicting genetic mutation effects, drug design, and biofuel development. Enhancing these modeling techniques is crucial for achieving greater prediction accuracy and reliability. However, the limited experimental data or the complexity of the pathway makes it challenging for researchers to predict phenotypes. Deep learning (DL) is known to perform better than other Machine Learning (ML) approaches if the right conditions are met (i.e., a large database and good choice of parameters). Here, we use a knowledge-based model to massively generate synthetic data and extend a small initial dataset of experimental values. The main objective is to assess if DL can perform at least as well as other ML approaches in flux prediction, using 68,950 instances. Two processing methods are used to generate DL models: cross-validation and repeated holdout evaluation. DL models predict the metabolic fluxes with high precision and slightly outperform the best-known ML approach (the Cubist model) with a lower RMSE (≤0.01) in both cases. They also outperform the PLS model (RMSE ≥ 30). This study is the first to use DL to predict the overall flux of a metabolic pathway only from variations of enzyme concentrations.
 
 ## Table of Contents
 
@@ -204,10 +204,8 @@ Metabolic_fluxes_DNN/
 
 ## References
 
-TODO
+Oulia, F.; Charton, P.; Lo-Thong-Viramoutou, O.; Acevedo-Rocha, C.G.; Liu, W.; Huynh, D.; Damour, C.; Wang, J.; Cadet, F. Metabolic Fluxes Using Deep Learning Based on Enzyme Variations: Application to Glycolysis in Entamoeba histolytica. Int. J. Mol. Sci. 2024, 25, 13390. https://doi.org/10.3390/ijms252413390
 
 ## License
 
-The code in this repository is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
-
-The data in this repository is licensed under the Creative Commons Attribution 4.0 International License. See the [LICENSE-CC-BY.md](./LICENSE-CC-BY.md) file for more details.
+The complete source code, datasets, and models are available under the Creative Commons Attribution-Non-Commercial ShareAlike International License, Version 4.0 (CC-BY-NC-SA 4.0) for open, non-commercial use.
